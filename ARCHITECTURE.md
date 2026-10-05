@@ -34,7 +34,7 @@ flowchart LR
 2. The TLSNotary prover, embedded in the app, makes the TLS request to the source's API itself. The DAO notary takes part in the session through MPC: it co-signs without ever seeing the content.
 3. The app reveals only the useful fields to the issuer service (for example `activities_total`, `first_activity`). The notary's signature proves they come from the source's server.
 4. The issuer service verifies the proof, applies the published rules and suggests a claim. The user approves it.
-5. The issuer signs the attestation and records it on Solana, bound to the user's `did:sol`.
+5. The issuer signs the attestation and records it on the Solana Attestation Service, under the Smart-SSI credential and the claim's schema, for the user's wallet. The DAO fee wallet pays for the account.
 6. A verifier reads the Solana account and checks signature, status and expiry, without contacting anyone.
 
 ## Components
@@ -46,7 +46,7 @@ flowchart LR
 | Notary (attestor) | Co-signs TLS sessions without seeing their content | TLSNotary `notary-server` | Dedicated DAO server |
 | Issuer service | Verifies proofs, applies rules, signs and records attestations | Rust, to reuse the TLSNotary verifier | Container on a VPS or PaaS |
 | Issuer key | Signs every attestation | KMS/HSM supporting ed25519, or an isolated signer | Never in clear in the service |
-| On-chain | DIDs, schemas, attestations, revocation | `did:sol` + Solana Attestation Service; an Anchor program only for a notary registry | Solana devnet, then mainnet |
+| On-chain | DIDs, schemas, attestations, expiry, revocation | `did:sol` + [Solana Attestation Service](https://solana.com/news/solana-attestation-service). No custom program: notary keys can be published under a DAO credential on SAS too | Solana devnet, then mainnet |
 | Solana RPC | Reads and writes | Standard provider with a fallback | Interchangeable third party, not a lock-in |
 | Ops database | Claim catalogue, rule versions, proof hashes. Never raw data | Postgres (or the existing Mongo) | Next to the issuer |
 | Rules | Public, versioned interpretation rules; their hash goes in every attestation | Files in this repo | GitHub |
