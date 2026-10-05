@@ -1,5 +1,0 @@
-# Modèle économique
-
-Le modèle économique du CLR repose sur plusieurs éléments clés, tels que les frais de transaction, les coûts de stockage de données et les frais de création de contenus. Les utilisateurs de COLORIA devront utiliser CLR pour effectuer des transactions dans l'écosystème, tels que l'achat ou la vente d'objets numériques, de services et d'autres produits. Les coûts de stockage de données seront également liés au CLR, ce qui permettra de s'assurer que les utilisateurs paient pour l'espace qu'ils occupent dans l'écosystème COLORIA. Enfin, les créateurs de contenus seront également rémunérés en CLR, ce qui permettra de créer un système de récompenses pour les utilisateurs qui contribuent à l'écosystème COLORIA.
-
-En plus de cela, il est possible que des revenus soient générés grâce à des partenariats et des publicités, qui pourront également être payés en CLR. Cela permettra de créer une économie stable et florissante au sein de l'écosystème COLORIA, offrant des incitations aux utilisateurs pour continuer à créer et à contribuer au développement de la plateforme.
