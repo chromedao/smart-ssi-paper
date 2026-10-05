@@ -1,202 +1,204 @@
-# Smart-SSI : l'identité prouvée
+# Smart-SSI: proven identity
 
-Une initiative de la Chrome DAO · 5 octobre 2026
+A Chrome DAO initiative · October 5, 2026
 
-## Résumé
+[Version française](README.fr.md)
 
-Smart-SSI permet à chacun de prouver des faits sur sa vie numérique, sans exposer ses données et sans dépendre d'une plateforme.
+## Summary
 
-**Le problème.** Notre réputation, nos compétences et notre activité sont enfermées dans des plateformes qui ne se parlent pas. Pour prouver quoi que ce soit, il faut soit le déclarer (et on ne nous croit pas), soit tout montrer (et on perd le contrôle). Pendant ce temps, faux profils et bots rendent la confiance en ligne de plus en plus coûteuse.
+Smart-SSI lets anyone prove facts about their digital life, without exposing their data and without depending on a platform.
 
-**La solution.** Smart-SSI combine trois briques :
+**The problem.** Our reputation, our skills and our activity are locked inside platforms that don't talk to each other. To prove anything, you either have to declare it (and nobody believes you) or show everything (and lose control). Meanwhile, fake profiles and bots make trust online more and more expensive.
 
-- **Preuve** : grâce au zkTLS, l'utilisateur prouve qu'une donnée vient bien d'un service réel (Strava, Spotify, une banque, une plateforme freelance), sans transmettre ses identifiants.
-- **Interprétation** : une IA transforme ces données prouvées en affirmations simples et utiles, par exemple « coureur régulier depuis 2 ans ».
-- **Attestation** : ces affirmations deviennent des attestations liées à l'identité décentralisée de l'utilisateur sur Solana. Les données brutes ne quittent jamais son appareil.
+**The solution.** Smart-SSI combines three building blocks:
 
-**Pourquoi maintenant.** Le zkTLS est devenu utilisable en production, Solana rend la vérification on-chain rapide et peu coûteuse, et l'Europe déploie son portefeuille d'identité numérique (eIDAS 2.0). L'identité légale aura bientôt son standard. La réputation prouvée, elle, n'en a pas encore.
+- **Proof**: with zkTLS, users prove that a piece of data really comes from a real service (Strava, Spotify, a bank, a freelance platform), without handing over their credentials.
+- **Interpretation**: an AI turns this proven data into simple, useful claims, for example "regular runner for 2 years".
+- **Attestation**: these claims become attestations linked to the user's decentralized identity on Solana. Raw data never leaves their device.
 
-**Le cadre.** Smart-SSI est une initiative de la [Chrome DAO](https://www.chromedao.xyz/initiatives), financée par les enchères quotidiennes de NFT sur Solana. C'est un bien commun : protocole open source, gouverné par les holders, sans token dédié. Ses premiers usages servent la DAO elle-même : votes anti-sybil, accès au Metaverse, sélection des initiatives.
+**Why now.** zkTLS is now production-ready, Solana makes on-chain verification fast and cheap, and Europe is rolling out its digital identity wallet (eIDAS 2.0). Legal identity will soon have its standard. Proven reputation does not have one yet.
 
-## Le problème
+**The setting.** Smart-SSI is a [Chrome DAO](https://www.chromedao.xyz/initiatives) initiative, funded by daily NFT auctions on Solana. It is a public good: an open-source protocol, governed by holders, with no dedicated token. Its first uses serve the DAO itself: anti-sybil voting, Metaverse access, and selection of initiatives.
 
-Aujourd'hui, prouver qui l'on est en ligne oblige à choisir entre ne pas être cru et tout exposer.
+## The problem
 
-**Des identités en silos.** Dix ans de courses sur Strava, des centaines de missions sur une plateforme freelance, une réputation construite sur un réseau social : tout cela existe, mais reste enfermé dans chaque service. Rien n'est portable, et tout disparaît si le compte est fermé ou la plateforme change ses règles.
+Today, proving who you are online forces a choice between not being believed and exposing everything.
 
-**La déclaration ne suffit plus.** Un CV, un profil, une bio : ce sont des affirmations que personne ne peut vérifier. Avec l'IA générative, produire un faux profil crédible ne coûte presque plus rien. Les communautés en ligne, les DAO et les campagnes d'airdrop en font les frais : un seul acteur peut se faire passer pour des centaines.
+**Siloed identities.** Ten years of runs on Strava, hundreds of jobs on a freelance platform, a reputation built on a social network: all of it exists, but stays locked inside each service. None of it is portable, and all of it disappears if the account is closed or the platform changes its rules.
 
-**La vérification coûte trop cher en vie privée.** Pour prouver un revenu, on envoie trois relevés bancaires complets. Pour prouver une expérience, on donne accès à son compte. Le vérificateur récupère bien plus que ce dont il a besoin, et l'utilisateur n'a aucun contrôle sur la suite.
+**Declaring is no longer enough.** A résumé, a profile, a bio: these are claims nobody can verify. With generative AI, producing a credible fake profile costs almost nothing. Online communities, DAOs and airdrop campaigns pay the price: a single actor can pass for hundreds.
 
-**Les réponses existantes sont partielles.** L'identité auto-souveraine (DID et Verifiable Credentials) donne le bon cadre, mais suppose qu'un émetteur de confiance accepte de délivrer des attestations. Or Strava, Spotify ou une banque n'en délivrent pas. Il manque un pont entre les données qui existent déjà et des attestations vérifiables.
+**Verification costs too much privacy.** To prove an income, you send three full bank statements. To prove experience, you grant access to your account. The verifier gets far more than it needs, and the user has no control over what happens next.
 
-## La solution
+**Existing answers are partial.** Self-sovereign identity (DIDs and Verifiable Credentials) provides the right framework, but assumes that a trusted issuer agrees to deliver attestations. Strava, Spotify or a bank do not. What is missing is a bridge between data that already exists and verifiable attestations.
 
-Smart-SSI transforme des données qui existent déjà en attestations vérifiables, en trois couches.
+## The solution
 
-### 1. Preuve : la donnée vient bien de la source
+Smart-SSI turns data that already exists into verifiable attestations, in three layers.
 
-L'utilisateur se connecte normalement au service concerné. Grâce au zkTLS, un réseau d'attestors observe l'échange chiffré sans en voir le contenu, puis l'utilisateur génère une preuve que la réponse du serveur contient bien telle donnée. Personne ne récupère ses identifiants, et seule l'information utile est révélée.
+### 1. Proof: the data really comes from the source
 
-### 2. Interprétation : la donnée devient une affirmation utile
+The user logs in to the service as usual. With zkTLS, a network of attestors observes the encrypted exchange without seeing its content, then the user generates a proof that the server's response contains a given piece of data. Nobody gets their credentials, and only the useful information is revealed.
 
-Une donnée brute (« 312 activités enregistrées ») dit peu de chose à un vérificateur. Un modèle d'IA la transforme en affirmation lisible et datée : « coureur régulier, 3 sorties par semaine depuis 2 ans ». L'IA produit des **faits dérivés**, jamais des traits de personnalité : chaque affirmation peut être reliée aux données prouvées qui la fondent.
+### 2. Interpretation: the data becomes a useful claim
 
-### 3. Attestation : l'affirmation est liée à l'identité
+A raw data point ("312 recorded activities") tells a verifier little. An AI model turns it into a readable, dated claim: "regular runner, 3 runs a week for 2 years". The AI produces **derived facts**, never personality traits: every claim can be traced back to the proven data it rests on.
 
-L'affirmation est signée et inscrite sur Solana, rattachée à l'identifiant décentralisé (DID) de l'utilisateur. Seule l'affirmation va on-chain, jamais les données. N'importe quel service peut ensuite la vérifier en quelques millisecondes, sans contacter ni l'utilisateur ni la source.
+### 3. Attestation: the claim is bound to the identity
 
-### Le parcours utilisateur
+The claim is signed and recorded on Solana, attached to the user's decentralized identifier (DID). Only the claim goes on-chain, never the data. Any service can then verify it in a few milliseconds, without contacting either the user or the source.
 
-1. Camille ouvre l'application et crée son identité : un wallet Solana est généré en arrière-plan, sans phrase de récupération à gérer.
-2. Elle choisit « Prouver mon activité sportive » et se connecte à Strava dans une fenêtre sécurisée.
-3. La preuve est générée sur son téléphone, l'IA propose l'affirmation « coureuse régulière depuis 2 ans ».
-4. Camille relit, valide, et l'attestation rejoint son profil.
-5. Plus tard, un club de trail lui demande une preuve d'expérience pour une course exigeante : elle partage l'attestation en un clic, rien d'autre.
+### The user journey
 
-Pour l'utilisateur, la cryptographie est invisible. Il voit seulement des badges qu'il contrôle, partage et peut retirer de son profil.
+1. Camille opens the app and creates her identity: a Solana wallet is generated in the background, with no recovery phrase to manage.
+2. She picks "Prove my sports activity" and logs in to Strava in a secure window.
+3. The proof is generated on her phone, and the AI suggests the claim "regular runner for 2 years".
+4. Camille reviews it, approves it, and the attestation joins her profile.
+5. Later, a trail-running club asks her for proof of experience for a demanding race: she shares the attestation in one click, and nothing else.
 
-## Cas d'usage
+For the user, the cryptography is invisible. They only see badges they control, share and can remove from their profile.
 
-Smart-SSI sert d'abord la Chrome DAO elle-même, puis s'ouvre à tout service qui a besoin de confiance.
+## Use cases
 
-### Dans la Chrome DAO
+Smart-SSI first serves the Chrome DAO itself, then opens up to any service that needs trust.
 
-- **Votes anti-sybil** : une personne vérifiée, une voix, quel que soit le nombre de wallets qu'elle contrôle. La gouvernance gagne en légitimité.
-- **Accès au Metaverse** : le hub 3D réserve déjà une porte aux holders du Ring. Des espaces peuvent s'ouvrir sur preuve : un atelier pour les artistes vérifiés, un club pour les sportifs réguliers.
-- **Sélection des initiatives** : un porteur de projet prouve son parcours (missions livrées, audience, régularité sportive ou artistique) au lieu de simplement le déclarer. La DAO finance des talents réels.
+### Inside the Chrome DAO
 
-### Au-delà de la DAO
+- **Anti-sybil voting**: one verified person, one vote, however many wallets they control. Governance gains legitimacy.
+- **Metaverse access**: the 3D hub already reserves a door for Ring holders. Spaces can open on proof: a studio for verified artists, a club for regular athletes.
+- **Selecting initiatives**: a project lead proves their track record (jobs delivered, audience, sporting or artistic consistency) instead of simply declaring it. The DAO funds real talent.
 
-| Usage | Ce qui est prouvé | Pour qui |
+### Beyond the DAO
+
+| Use | What is proven | For whom |
 | --- | --- | --- |
-| Airdrops et campagnes | Personne unique, activité réelle sur plusieurs services | Projets Web3 |
-| Réputation freelance | Nombre de missions, notes moyennes, ancienneté | Plateformes, clients |
-| Preuve de revenus | Revenu supérieur à un seuil, sans montant exact | Bailleurs, prêteurs |
-| Communautés sur preuve | Pratique d'une discipline, appartenance à un groupe | Clubs, Discord, événements |
-| Recrutement | Compétences démontrées par l'activité (code publié, projets) | Entreprises |
+| Airdrops and campaigns | Unique person, real activity across several services | Web3 projects |
+| Freelance reputation | Number of jobs, average ratings, seniority | Platforms, clients |
+| Proof of income | Income above a threshold, without the exact amount | Landlords, lenders |
+| Proof-gated communities | Practice of a discipline, membership of a group | Clubs, Discord, events |
+| Hiring | Skills demonstrated through activity (published code, projects) | Companies |
 
-Dans chaque cas, le vérificateur obtient exactement la réponse à sa question, et rien de plus.
+In each case, the verifier gets exactly the answer to its question, and nothing more.
 
-## Positionnement
+## Positioning
 
-Smart-SSI ne cherche pas à dire qui vous êtes légalement, mais à prouver ce que vous avez fait.
+Smart-SSI does not try to say who you are legally, but to prove what you have done.
 
-| Solution | Ce qu'elle prouve | Comment | Différence avec Smart-SSI |
+| Solution | What it proves | How | Difference from Smart-SSI |
 | --- | --- | --- | --- |
-| Portefeuille européen (eIDAS 2.0) | Identité légale, diplômes, permis | Émetteurs officiels (États, institutions) | Complémentaire : Smart-SSI couvre ce qu'aucune institution n'atteste |
-| World ID | Unicité humaine | Scan biométrique de l'iris | Pas de biométrie, et des preuves bien plus riches que « je suis humain » |
-| Gitcoin Passport (Human Passport) | Score d'humanité | Agrégation de comptes connectés | Smart-SSI prouve le contenu de l'activité, pas seulement l'existence des comptes |
-| Reclaim Protocol | Données Web2 brutes | zkTLS | Brique d'infrastructure que Smart-SSI peut utiliser ; il manque la couche d'interprétation et l'identité |
+| European wallet (eIDAS 2.0) | Legal identity, diplomas, licences | Official issuers (states, institutions) | Complementary: Smart-SSI covers what no institution attests |
+| World ID | Human uniqueness | Biometric iris scan | No biometrics, and proofs far richer than "I am human" |
+| Gitcoin Passport (Human Passport) | Humanity score | Aggregation of connected accounts | Smart-SSI proves the content of the activity, not just that the accounts exist |
+| Reclaim Protocol | Raw Web2 data | zkTLS | An infrastructure block Smart-SSI can use; it lacks the interpretation layer and the identity |
 
-**Notre angle :** être la couche qui relie les preuves de données (zkTLS) à une identité lisible par des humains et des applications. Les standards du W3C (DID, Verifiable Credentials) sont respectés, ce qui garde la porte ouverte à une interopérabilité avec le portefeuille européen.
+**Our angle:** to be the layer that connects data proofs (zkTLS) to an identity readable by humans and applications. W3C standards (DID, Verifiable Credentials) are followed, which keeps the door open to interoperability with the European wallet.
 
-## Modèle économique et gouvernance
+## Economic model and governance
 
-Smart-SSI est un bien commun financé par la Chrome DAO : pas de token dédié, pas de levée de fonds.
+Smart-SSI is a public good funded by the Chrome DAO: no dedicated token, no fundraising.
 
-**Financement.** Chaque jour, un Chrome est mis aux enchères sur Solana. Une partie de ces recettes finance les initiatives de la DAO, dont Smart-SSI : développement, audits de sécurité, infrastructure.
+**Funding.** Every day, one Chrome is auctioned on Solana. Part of the proceeds funds the DAO's initiatives, including Smart-SSI: development, security audits, infrastructure.
 
-**Gouvernance.** Les holders de Chromes votent les décisions structurantes :
+**Governance.** Chrome holders vote on structural decisions:
 
-- les sources de données prises en charge en priorité ;
-- les règles d'émission des attestations (seuils, durée de validité) ;
-- le choix et l'élargissement du réseau d'attestors ;
-- l'allocation du budget de l'initiative.
+- which data sources are supported first;
+- the rules for issuing attestations (thresholds, validity period);
+- the selection and expansion of the attestor network;
+- the allocation of the initiative's budget.
 
-**Revenus.** Pour l'utilisateur, Smart-SSI est gratuit. Les vérificateurs professionnels (plateformes, entreprises, projets Web3) peuvent payer une redevance par vérification ou un abonnement. Ces revenus reviennent au trésor de la DAO, qui finance d'autres initiatives.
+**Revenue.** Smart-SSI is free for users. Professional verifiers (platforms, companies, Web3 projects) can pay a per-verification fee or a subscription. This revenue goes back to the DAO treasury, which funds other initiatives.
 
-La boucle est simple : les enchères financent le protocole, le protocole renforce la gouvernance de la DAO, et ses revenus alimentent le trésor.
+The loop is simple: auctions fund the protocol, the protocol strengthens the DAO's governance, and its revenue feeds the treasury.
 
-## Modèle de confiance et vie privée
+## Trust model and privacy
 
-Chaque attestation Smart-SSI repose sur deux niveaux de confiance distincts, et nous les rendons explicites.
+Every Smart-SSI attestation rests on two distinct levels of trust, and we make them explicit.
 
-| Niveau | Ce qui est garanti | À qui on fait confiance | Comment on réduit cette confiance |
+| Level | What is guaranteed | Who is trusted | How that trust is reduced |
 | --- | --- | --- | --- |
-| Preuve de la donnée | La donnée vient bien du service indiqué | Aux attestors zkTLS | Plusieurs attestors indépendants, sélectionnés par la DAO |
-| Interprétation | L'affirmation découle correctement de la donnée | À l'émetteur Smart-SSI | Modèle et règles publics, puis exécution en environnement sécurisé (TEE), puis zkML à terme |
+| Data proof | The data really comes from the stated service | The zkTLS attestors | Several independent attestors, selected by the DAO |
+| Interpretation | The claim correctly follows from the data | The Smart-SSI issuer | Public model and rules, then execution in a trusted execution environment (TEE), then zkML in the long run |
 
-**Ce qui ne quitte jamais l'appareil :** identifiants de connexion, données brutes, historique d'activité.
+**What never leaves the device:** login credentials, raw data, activity history.
 
-**Ce qui est inscrit on-chain :** l'affirmation, sa date, sa source (« Strava »), sa signature et son statut (valide ou révoquée).
+**What is recorded on-chain:** the claim, its date, its source ("Strava"), its signature and its status (valid or revoked).
 
-**Le contrôle de l'utilisateur.** Il choisit quelles preuves générer, valide chaque affirmation avant émission, décide avec qui la partager, et peut la révoquer à tout moment. Une révocation ne fait pas disparaître la trace on-chain, mais rend l'attestation invalide pour tout vérificateur.
+**User control.** Users choose which proofs to generate, approve every claim before it is issued, decide whom to share it with, and can revoke it at any time. A revocation does not erase the on-chain record, but makes the attestation invalid for every verifier.
 
-**Conformité RGPD.** Les affirmations portent sur des faits d'activité et non sur des traits psychologiques, ce qui limite le profilage. Aucune donnée sensible (santé, opinions, religion) n'est interprétée. Le traitement repose sur le consentement explicite de l'utilisateur, étape par étape. Point ouvert : l'articulation entre le droit à l'effacement et l'immuabilité de la blockchain, que nous traitons en ne mettant on-chain aucune donnée personnelle en clair, à valider avec un juriste.
+**GDPR compliance.** Claims cover facts about activity, not psychological traits, which limits profiling. No sensitive data (health, opinions, religion) is interpreted. Processing relies on the user's explicit consent, step by step. Open point: reconciling the right to erasure with the immutability of the blockchain, which we address by putting no personal data in clear on-chain, to be confirmed with a lawyer.
 
-## Roadmap et limites
+## Roadmap and limits
 
-Le déploiement suit quatre phases, chacune validée par la DAO avant de lancer la suivante.
+Deployment follows four phases, each approved by the DAO before the next one starts.
 
-1. **Phase 1, preuve de concept** : DID sur Solana, une première source (Strava ou GitHub) via un fournisseur zkTLS existant, premières attestations émises pour des membres de la DAO.
-2. **Phase 2, usages internes** : votes anti-sybil et accès sur preuve dans le Metaverse, 5 à 10 sources prises en charge.
-3. **Phase 3, ouverture** : SDK public pour les vérificateurs externes, premiers partenaires payants, audit de sécurité complet.
-4. **Phase 4, décentralisation** : réseau d'attestors multiples, interprétation en environnement sécurisé, travaux d'interopérabilité avec le portefeuille européen.
+1. **Phase 1, proof of concept**: DID on Solana, a first source (Strava or GitHub) through an existing zkTLS provider, first attestations issued to DAO members.
+2. **Phase 2, internal uses**: anti-sybil voting and proof-gated access in the Metaverse, 5 to 10 supported sources.
+3. **Phase 3, opening up**: public SDK for external verifiers, first paying partners, full security audit.
+4. **Phase 4, decentralization**: multiple attestor network, interpretation in a trusted environment, interoperability work with the European wallet.
 
-### Limites assumées
+### Acknowledged limits
 
-- **Dépendance aux services sources** : si un site change son interface ou bloque l'accès, la source concernée doit être adaptée.
-- **Confiance résiduelle** : tant que l'interprétation n'est pas prouvée cryptographiquement, l'émetteur reste un tiers de confiance, encadré par la transparence et la gouvernance.
-- **Adoption** : une attestation n'a de valeur que si des vérificateurs l'acceptent. C'est pourquoi les premiers usages sont internes à la DAO.
-- **Cadre juridique** : le statut des attestations et leur articulation avec le RGPD doivent être validés avant l'ouverture à des tiers.
+- **Dependence on source services**: if a site changes its interface or blocks access, the affected source must be adapted.
+- **Residual trust**: until interpretation is proven cryptographically, the issuer remains a trusted third party, kept in check by transparency and governance.
+- **Adoption**: an attestation is only worth something if verifiers accept it. That is why the first uses are internal to the DAO.
+- **Legal framework**: the status of attestations and how they fit with the GDPR must be validated before opening up to third parties.
 
-## Annexe technique
+## Technical appendix
 
-Cette annexe décrit les choix d'implémentation de la phase 1 ; ils seront révisés à chaque phase.
+This appendix describes the implementation choices for phase 1; they will be revised at each phase.
 
-### Flux complet
+### End-to-end flow
 
-1. Le client (application mobile) crée une paire de clés ed25519 et enregistre le DID de l'utilisateur sur Solana.
-2. L'utilisateur lance une preuve : le client ouvre une session TLS vers la source via un attestor zkTLS.
-3. Le client génère la preuve ZK sur le contenu de la réponse ; l'attestor signe la preuve.
-4. Le service d'interprétation vérifie la preuve, applique le modèle et propose une affirmation.
-5. L'utilisateur valide ; l'émetteur Smart-SSI signe l'attestation et l'inscrit on-chain, rattachée au DID.
-6. Un vérificateur lit l'attestation, contrôle signature, statut et date, sans contacter personne.
+1. The client (mobile app) creates an ed25519 key pair and registers the user's DID on Solana.
+2. The user starts a proof: the client opens a TLS session to the source through a zkTLS attestor.
+3. The client generates the ZK proof over the response content; the attestor signs the proof.
+4. The interpretation service verifies the proof, applies the model and suggests a claim.
+5. The user approves; the Smart-SSI issuer signs the attestation and records it on-chain, attached to the DID.
+6. A verifier reads the attestation and checks signature, status and date, without contacting anyone.
 
-### Identité (DID)
+### Identity (DID)
 
-Nous nous appuyons sur la méthode **did:sol**, déjà utilisée sur Solana, plutôt que de créer une méthode propriétaire. Le document DID contient les clés de vérification et peut déclarer plusieurs appareils.
+We rely on the **did:sol** method, already used on Solana, rather than creating a proprietary method. The DID document holds the verification keys and can declare several devices.
 
 ### Attestations
 
-Les attestations sont stockées dans des comptes Solana dédiés (par exemple via le Solana Attestation Service), avec un schéma public :
+Attestations are stored in dedicated Solana accounts (for example through the Solana Attestation Service), with a public schema:
 
 ```json
 {
-  "subject": "did:sol:<identifiant>",
+  "subject": "did:sol:<identifier>",
   "claim": "runner.regular",
   "value": { "since": "2024-09", "frequency_per_week": 3 },
   "source": "strava",
-  "proof_ref": "<hash de la preuve zkTLS>",
-  "model_version": "<hash du modèle et des règles>",
+  "proof_ref": "<hash of the zkTLS proof>",
+  "model_version": "<hash of the model and rules>",
   "issued_at": "2026-10-05",
   "expires_at": "2027-10-05",
   "status": "valid"
 }
 ```
 
-Les données brutes ne sont jamais stockées ; seul le hash de la preuve permet un audit ultérieur.
+Raw data is never stored; only the proof hash allows a later audit.
 
-### Vérification sur Solana
+### Verification on Solana
 
-- **Signatures** d'attestors et d'émetteur : vérifiées via les programmes natifs ed25519 ou secp256k1, pour un coût négligeable.
-- **Preuves Groth16**, si elles sont vérifiées on-chain : via les syscalls alt_bn128 (bibliothèque groth16-solana).
-- Programme principal écrit en Rust avec Anchor.
+- **Signatures** from attestors and the issuer: verified through the native ed25519 or secp256k1 programs, at negligible cost.
+- **Groth16 proofs**, if verified on-chain: through the alt_bn128 syscalls (groth16-solana library).
+- Main program written in Rust with Anchor.
 
-### Couche zkTLS
+### zkTLS layer
 
-Phase 1 : intégration d'un fournisseur existant compatible Solana ([Reclaim Protocol](https://docs.reclaimprotocol.org/solana)), pour aller vite. Phases suivantes : évaluation d'une stack propre basée sur des briques open source (attestor de Reclaim, TLSNotary) pour opérer un réseau d'attestors gouverné par la DAO.
+Phase 1: integration of an existing Solana-compatible provider ([Reclaim Protocol](https://docs.reclaimprotocol.org/solana)), to move fast. Later phases: evaluation of an in-house stack built on open-source components (the Reclaim attestor, TLSNotary) to run an attestor network governed by the DAO.
 
-### Pipeline d'interprétation
+### Interpretation pipeline
 
-1. Extraction des champs utiles depuis la donnée prouvée.
-2. Application de règles déterministes et publiques quand c'est possible (seuils, fréquences, ancienneté).
-3. Recours à un LLM avec sortie structurée uniquement pour les sources textuelles, avec un catalogue fermé d'affirmations possibles.
-4. Mesure de fiabilité sur un jeu de test annoté, avec la précision définie ainsi :
+1. Extraction of the useful fields from the proven data.
+2. Application of deterministic, public rules whenever possible (thresholds, frequencies, seniority).
+3. Use of an LLM with structured output only for text sources, with a closed catalogue of possible claims.
+4. Reliability measured on an annotated test set, with precision defined as:
 
 ```math
-P = \frac{\text{prédictions correctes}}{\text{total des prédictions}}
+P = \frac{\text{correct predictions}}{\text{total predictions}}
 ```
 
-Chaque version du modèle et des règles est identifiée par un hash inscrit dans l'attestation, pour que toute affirmation reste traçable.
+Each version of the model and rules is identified by a hash recorded in the attestation, so every claim stays traceable.
