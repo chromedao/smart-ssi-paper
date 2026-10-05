@@ -89,7 +89,7 @@ Smart-SSI does not try to say who you are legally, but to prove what you have do
 | European wallet (eIDAS 2.0) | Legal identity, diplomas, licences | Official issuers (states, institutions) | Complementary: Smart-SSI covers what no institution attests |
 | World ID | Human uniqueness | Biometric iris scan | No biometrics, and proofs far richer than "I am human" |
 | Gitcoin Passport (Human Passport) | Humanity score | Aggregation of connected accounts | Smart-SSI proves the content of the activity, not just that the accounts exist |
-| Reclaim Protocol | Raw Web2 data | zkTLS | An infrastructure block Smart-SSI can use; it lacks the interpretation layer and the identity |
+| Reclaim Protocol | Raw Web2 data | Hosted zkTLS infrastructure | Smart-SSI runs its own open-source zkTLS layer, with no external provider, and adds interpretation and identity |
 
 **Our angle:** to be the layer that connects data proofs (zkTLS) to an identity readable by humans and applications. W3C standards (DID, Verifiable Credentials) are followed, which keeps the door open to interoperability with the European wallet.
 
@@ -131,7 +131,7 @@ Every Smart-SSI attestation rests on two distinct levels of trust, and we make t
 
 Deployment follows four phases, each approved by the DAO before the next one starts.
 
-1. **Phase 1, proof of concept**: DID on Solana, a first source (Strava or GitHub) through an existing zkTLS provider, first attestations issued to DAO members.
+1. **Phase 1, proof of concept**: DID on Solana, a first source (Strava or GitHub) proven through a zkTLS attestor run by the DAO on open-source components, first attestations issued to DAO members.
 2. **Phase 2, internal uses**: anti-sybil voting and proof-gated access in the Metaverse, 5 to 10 supported sources.
 3. **Phase 3, opening up**: public SDK for external verifiers, first paying partners, full security audit.
 4. **Phase 4, decentralization**: multiple attestor network, interpretation in a trusted environment, interoperability work with the European wallet.
@@ -188,7 +188,7 @@ Raw data is never stored; only the proof hash allows a later audit.
 
 ### zkTLS layer
 
-Phase 1: integration of an existing Solana-compatible provider ([Reclaim Protocol](https://docs.reclaimprotocol.org/solana)), to move fast. Later phases: evaluation of an in-house stack built on open-source components (the Reclaim attestor, TLSNotary) to run an attestor network governed by the DAO.
+No external provider: Smart-SSI runs its own zkTLS layer, built on open-source components ([TLSNotary](https://tlsnotary.org)), so the protocol depends on no third-party service, uptime or pricing. Phase 1: one attestor operated by the DAO. Later phases: a network of independent attestors, selected and governed by the DAO.
 
 ### Interpretation pipeline
 
