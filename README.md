@@ -2,7 +2,7 @@
 
 A Chrome DAO initiative · October 5, 2026
 
-[Version française](README.fr.md) · [Roadmap](ROADMAP.md) · [Project board](https://github.com/orgs/chromedao/projects/3) · [Site](https://www.chromedao.xyz/smart-ssi)
+[Version française](README.fr.md) · [Roadmap](ROADMAP.md) · [Architecture](ARCHITECTURE.md) · [Project board](https://github.com/orgs/chromedao/projects/3) · [Site](https://www.chromedao.xyz/smart-ssi)
 
 ## Summary
 
