@@ -2,7 +2,7 @@
 
 Une initiative de la Chrome DAO · 5 octobre 2026
 
-[English version](README.md) · [Roadmap](ROADMAP.md) · [Tableau du projet](https://github.com/orgs/chromedao/projects/3) · [Site](https://www.chromedao.xyz/smart-ssi)
+[English version](README.md) · [Roadmap](ROADMAP.md) · [Architecture](ARCHITECTURE.md) · [Tableau du projet](https://github.com/orgs/chromedao/projects/3) · [Site](https://www.chromedao.xyz/smart-ssi)
 
 ## Résumé
 
@@ -121,7 +121,7 @@ Chaque attestation Smart-SSI repose sur deux niveaux de confiance distincts, et 
 
 **Ce qui ne quitte jamais l'appareil :** identifiants de connexion, données brutes, historique d'activité.
 
-**Ce qui est inscrit on-chain :** l'affirmation, sa date, sa source (« Strava »), sa signature et son statut (valide ou révoquée).
+**Ce qui est inscrit on-chain :** l'affirmation, sa date, sa source (« Strava ») et la signature de l'émetteur, dans un compte du Solana Attestation Service, fermé si l'utilisateur la révoque.
 
 **Le contrôle de l'utilisateur.** Il choisit quelles preuves générer, valide chaque affirmation avant émission, décide avec qui la partager, et peut la révoquer à tout moment. Une révocation ne fait pas disparaître la trace on-chain, mais rend l'attestation invalide pour tout vérificateur.
 
@@ -162,29 +162,38 @@ Nous nous appuyons sur la méthode **did:sol**, déjà utilisée sur Solana, plu
 
 ### Attestations
 
-Les attestations sont stockées dans des comptes Solana dédiés (par exemple via le Solana Attestation Service), avec un schéma public :
+Smart-SSI ne déploie pas son propre programme on-chain. Les attestations utilisent le [Solana Attestation Service](https://solana.com/news/solana-attestation-service) (SAS), le standard ouvert des attestations vérifiables sur Solana :
+
+- **Credential** : l'identité d'émetteur de Smart-SSI sur SAS, contrôlée par la DAO, avec sa liste de signataires autorisés.
+- **Schéma** : un schéma public et versionné par type d'affirmation (par exemple `runner.regular` v1). Un schéma peut être mis en pause sans être supprimé.
+- **Attestation** : un compte Solana par affirmation et par utilisateur, signé par l'émetteur, avec une date d'expiration.
 
 ```json
 {
-  "subject": "did:sol:<identifiant>",
-  "claim": "runner.regular",
-  "value": { "since": "2024-09", "frequency_per_week": 3 },
-  "source": "strava",
-  "proof_ref": "<hash de la preuve zkTLS>",
-  "model_version": "<hash du modèle et des règles>",
-  "issued_at": "2026-10-05",
-  "expires_at": "2027-10-05",
-  "status": "valid"
+  "credential": "<credential Smart-SSI>",
+  "schema": "runner.regular v1",
+  "nonce": "<wallet de l'utilisateur, résolu depuis did:sol>",
+  "signer": "<clé de l'émetteur Smart-SSI>",
+  "expiry": "2027-10-05",
+  "data": {
+    "since": "2024-09",
+    "frequency_per_week": 3,
+    "source": "strava",
+    "proof_ref": "<hash de la preuve zkTLS>",
+    "model_version": "<hash du modèle et des règles>",
+    "issued_at": "2026-10-05"
+  }
 }
 ```
 
-Les données brutes ne sont jamais stockées ; seul le hash de la preuve permet un audit ultérieur.
+Les données brutes ne sont jamais stockées ; seul le hash de la preuve permet un audit ultérieur. Le wallet de frais de la DAO paie les comptes, séparément de la clé de signature : l'utilisateur n'a besoin d'aucun SOL.
 
 ### Vérification sur Solana
 
-- **Signatures** d'attestors et d'émetteur : vérifiées via les programmes natifs ed25519 ou secp256k1, pour un coût négligeable.
-- **Preuves Groth16**, si elles sont vérifiées on-chain : via les syscalls alt_bn128 (bibliothèque groth16-solana).
-- Programme principal écrit en Rust avec Anchor.
+- La preuve zkTLS est vérifiée hors chaîne par le service émetteur ; seul son hash va on-chain.
+- Un vérificateur lit le compte d'attestation et contrôle qu'il existe, qu'il relève du credential Smart-SSI et du schéma attendu, que son signataire est autorisé et qu'il n'a pas expiré.
+- La révocation ferme le compte d'attestation à la demande de l'utilisateur : l'attestation n'est plus valide, mais son historique reste dans le registre de Solana.
+- Comme SAS est partagé, les attestations Smart-SSI côtoient celles d'autres émetteurs (KYC, travail, jeu), et un vérificateur peut les combiner.
 
 ### Couche zkTLS
 

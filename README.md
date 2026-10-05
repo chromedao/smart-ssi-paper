@@ -2,7 +2,7 @@
 
 A Chrome DAO initiative · October 5, 2026
 
-[Version française](README.fr.md) · [Roadmap](ROADMAP.md) · [Project board](https://github.com/orgs/chromedao/projects/3) · [Site](https://www.chromedao.xyz/smart-ssi)
+[Version française](README.fr.md) · [Roadmap](ROADMAP.md) · [Architecture](ARCHITECTURE.md) · [Project board](https://github.com/orgs/chromedao/projects/3) · [Site](https://www.chromedao.xyz/smart-ssi)
 
 ## Summary
 
@@ -121,7 +121,7 @@ Every Smart-SSI attestation rests on two distinct levels of trust, and we make t
 
 **What never leaves the device:** login credentials, raw data, activity history.
 
-**What is recorded on-chain:** the claim, its date, its source ("Strava"), its signature and its status (valid or revoked).
+**What is recorded on-chain:** the claim, its date, its source ("Strava") and the issuer's signature, in a Solana Attestation Service account that is closed if the user revokes it.
 
 **User control.** Users choose which proofs to generate, approve every claim before it is issued, decide whom to share it with, and can revoke it at any time. A revocation does not erase the on-chain record, but makes the attestation invalid for every verifier.
 
@@ -162,29 +162,38 @@ We rely on the **did:sol** method, already used on Solana, rather than creating 
 
 ### Attestations
 
-Attestations are stored in dedicated Solana accounts (for example through the Solana Attestation Service), with a public schema:
+Smart-SSI does not deploy its own on-chain program. Attestations use the [Solana Attestation Service](https://solana.com/news/solana-attestation-service) (SAS), the open standard for verifiable credentials on Solana:
+
+- **Credential**: Smart-SSI's issuer identity on SAS, controlled by the DAO, with its list of authorized signers.
+- **Schema**: one public, versioned schema per claim type (for example `runner.regular` v1). A schema can be paused without being deleted.
+- **Attestation**: one Solana account per claim and per user, signed by the issuer, with an expiry date.
 
 ```json
 {
-  "subject": "did:sol:<identifier>",
-  "claim": "runner.regular",
-  "value": { "since": "2024-09", "frequency_per_week": 3 },
-  "source": "strava",
-  "proof_ref": "<hash of the zkTLS proof>",
-  "model_version": "<hash of the model and rules>",
-  "issued_at": "2026-10-05",
-  "expires_at": "2027-10-05",
-  "status": "valid"
+  "credential": "<Smart-SSI credential>",
+  "schema": "runner.regular v1",
+  "nonce": "<user wallet, resolved from did:sol>",
+  "signer": "<Smart-SSI issuer key>",
+  "expiry": "2027-10-05",
+  "data": {
+    "since": "2024-09",
+    "frequency_per_week": 3,
+    "source": "strava",
+    "proof_ref": "<hash of the zkTLS proof>",
+    "model_version": "<hash of the model and rules>",
+    "issued_at": "2026-10-05"
+  }
 }
 ```
 
-Raw data is never stored; only the proof hash allows a later audit.
+Raw data is never stored; only the proof hash allows a later audit. The DAO's fee wallet pays for the accounts, separately from the signing key, so users need no SOL.
 
 ### Verification on Solana
 
-- **Signatures** from attestors and the issuer: verified through the native ed25519 or secp256k1 programs, at negligible cost.
-- **Groth16 proofs**, if verified on-chain: through the alt_bn128 syscalls (groth16-solana library).
-- Main program written in Rust with Anchor.
+- The zkTLS proof is verified off-chain by the issuer service; only its hash goes on-chain.
+- A verifier reads the attestation account and checks that it exists, that it belongs to the Smart-SSI credential and the expected schema, that its signer is an authorized signer, and that it has not expired.
+- Revocation closes the attestation account at the user's request: the attestation stops being valid, while its history stays in the Solana ledger.
+- Because SAS is shared, Smart-SSI attestations sit next to those of other issuers (KYC, work, gaming), and a verifier can combine them.
 
 ### zkTLS layer
 
