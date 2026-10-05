@@ -89,7 +89,7 @@ Smart-SSI ne cherche pas à dire qui vous êtes légalement, mais à prouver ce 
 | Portefeuille européen (eIDAS 2.0) | Identité légale, diplômes, permis | Émetteurs officiels (États, institutions) | Complémentaire : Smart-SSI couvre ce qu'aucune institution n'atteste |
 | World ID | Unicité humaine | Scan biométrique de l'iris | Pas de biométrie, et des preuves bien plus riches que « je suis humain » |
 | Gitcoin Passport (Human Passport) | Score d'humanité | Agrégation de comptes connectés | Smart-SSI prouve le contenu de l'activité, pas seulement l'existence des comptes |
-| Reclaim Protocol | Données Web2 brutes | zkTLS | Brique d'infrastructure que Smart-SSI peut utiliser ; il manque la couche d'interprétation et l'identité |
+| Reclaim Protocol | Données Web2 brutes | Infrastructure zkTLS hébergée | Smart-SSI opère sa propre couche zkTLS open source, sans fournisseur externe, et y ajoute l'interprétation et l'identité |
 
 **Notre angle :** être la couche qui relie les preuves de données (zkTLS) à une identité lisible par des humains et des applications. Les standards du W3C (DID, Verifiable Credentials) sont respectés, ce qui garde la porte ouverte à une interopérabilité avec le portefeuille européen.
 
@@ -131,7 +131,7 @@ Chaque attestation Smart-SSI repose sur deux niveaux de confiance distincts, et 
 
 Le déploiement suit quatre phases, chacune validée par la DAO avant de lancer la suivante. L'avancement est suivi sur le [tableau public](https://github.com/orgs/chromedao/projects/3) et dans [ROADMAP.md](ROADMAP.md).
 
-1. **Phase 1, preuve de concept** : DID sur Solana, une première source (Strava ou GitHub) via un fournisseur zkTLS existant, premières attestations émises pour des membres de la DAO.
+1. **Phase 1, preuve de concept** : DID sur Solana, une première source (Strava ou GitHub) prouvée via un attestor zkTLS opéré par la DAO sur des briques open source, premières attestations émises pour des membres de la DAO.
 2. **Phase 2, usages internes** : votes anti-sybil et accès sur preuve dans le Metaverse, 5 à 10 sources prises en charge.
 3. **Phase 3, ouverture** : SDK public pour les vérificateurs externes, premiers partenaires payants, audit de sécurité complet.
 4. **Phase 4, décentralisation** : réseau d'attestors multiples, interprétation en environnement sécurisé, travaux d'interopérabilité avec le portefeuille européen.
@@ -188,7 +188,7 @@ Les données brutes ne sont jamais stockées ; seul le hash de la preuve permet 
 
 ### Couche zkTLS
 
-Phase 1 : intégration d'un fournisseur existant compatible Solana ([Reclaim Protocol](https://docs.reclaimprotocol.org/solana)), pour aller vite. Phases suivantes : évaluation d'une stack propre basée sur des briques open source (attestor de Reclaim, TLSNotary) pour opérer un réseau d'attestors gouverné par la DAO.
+Aucun fournisseur externe : Smart-SSI opère sa propre couche zkTLS, construite sur des briques open source ([TLSNotary](https://tlsnotary.org)), pour que le protocole ne dépende d'aucun service tiers, de sa disponibilité ni de sa tarification. Phase 1 : un attestor opéré par la DAO. Phases suivantes : un réseau d'attestors indépendants, sélectionnés et gouvernés par la DAO.
 
 ### Pipeline d'interprétation
 
