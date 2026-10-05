@@ -2,7 +2,7 @@
 
 A Chrome DAO initiative · October 5, 2026
 
-[Version française](README.fr.md)
+[Version française](README.fr.md) · [Roadmap](ROADMAP.md) · [Project board](https://github.com/orgs/chromedao/projects/3) · [Site](https://www.chromedao.xyz/smart-ssi)
 
 ## Summary
 
@@ -129,7 +129,7 @@ Every Smart-SSI attestation rests on two distinct levels of trust, and we make t
 
 ## Roadmap and limits
 
-Deployment follows four phases, each approved by the DAO before the next one starts.
+Deployment follows four phases, each approved by the DAO before the next one starts. Progress is tracked on the [public board](https://github.com/orgs/chromedao/projects/3) and in [ROADMAP.md](ROADMAP.md).
 
 1. **Phase 1, proof of concept**: DID on Solana, a first source (Strava or GitHub) through an existing zkTLS provider, first attestations issued to DAO members.
 2. **Phase 2, internal uses**: anti-sybil voting and proof-gated access in the Metaverse, 5 to 10 supported sources.
