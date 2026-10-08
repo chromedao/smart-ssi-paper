@@ -211,3 +211,7 @@ P = \frac{\text{prédictions correctes}}{\text{total des prédictions}}
 ```
 
 Chaque version du modèle et des règles est identifiée par un hash inscrit dans l'attestation, pour que toute affirmation reste traçable.
+
+---
+
+Ce livre blanc est sous licence [CC BY 4.0](LICENSE) : vous pouvez le partager et l'adapter en citant Chrome DAO. Le code du prototype est dans [chromedao/smart-ssi](https://github.com/chromedao/smart-ssi), sous ses propres licences. Les noms « Smart-SSI » et « Chrome DAO » ne sont pas couverts : voir la [politique de marque](https://github.com/chromedao/smart-ssi/blob/main/TRADEMARKS.md).

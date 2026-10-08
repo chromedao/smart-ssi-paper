@@ -211,3 +211,7 @@ P = \frac{\text{correct predictions}}{\text{total predictions}}
 ```
 
 Each version of the model and rules is identified by a hash recorded in the attestation, so every claim stays traceable.
+
+---
+
+This white paper is licensed under [CC BY 4.0](LICENSE): share and adapt it, crediting Chrome DAO. The prototype code lives in [chromedao/smart-ssi](https://github.com/chromedao/smart-ssi) under its own licenses. "Smart-SSI" and "Chrome DAO" are not covered: see [trademarks](https://github.com/chromedao/smart-ssi/blob/main/TRADEMARKS.md).
