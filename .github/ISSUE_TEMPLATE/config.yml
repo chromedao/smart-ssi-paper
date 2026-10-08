@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Idea for Smart-SSI (source, claim, use case)
+    url: https://github.com/chromedao/smart-ssi/issues/new?template=idea.yml
+    about: Ideas and the roadmap live in the code repository.
   - name: CHROMES DAO Discord
     url: https://discord.gg/7TVqQF4GH
     about: Talk with holders and the team.
