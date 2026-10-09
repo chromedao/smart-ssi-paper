@@ -25,4 +25,4 @@ Later means later: not a promise, not a date.
 
 1. Open an [idea](https://github.com/chromedao/smart-ssi/issues/new?template=idea.yml) or a [question](https://github.com/chromedao/smart-ssi-paper/issues/new?template=question.yml).
 2. Chrome holders vote on what Smart-SSI proves first: sources, issuance rules, attestors, budget.
-3. Keep the conversation going on the [CHROMES DAO Discord](https://discord.gg/7TVqQF4GH). GitHub is the archive.
+3. Keep the conversation going on the [CHROMES DAO Discord](https://discord.gg/3yWKxcwp7Z). GitHub is the archive.
