@@ -16,7 +16,7 @@ Smart-SSI lets anyone prove facts about their digital life, without exposing the
 - **Interpretation**: an AI turns this proven data into simple, useful claims, for example "regular runner for 2 years".
 - **Attestation**: these claims become attestations linked to the user's decentralized identity on Solana. Raw data never leaves their device.
 
-**Why now.** zkTLS is now production-ready, Solana makes on-chain verification fast and cheap, and Europe is rolling out its digital identity wallet (eIDAS 2.0). Legal identity will soon have its standard. Proven reputation does not have one yet.
+**Why now.** zkTLS is now production-ready, Solana makes on-chain verification fast and cheap, and Europe is rolling out its digital identity wallet (eIDAS 2.0). Legal identity will soon have its standard. Proven reputation does not have one yet. And as AI agents start acting for people, they need facts they can verify: Smart-SSI can be [their proof layer](#smart-ssi-for-ai-agents).
 
 **The setting.** Smart-SSI is a [Chrome DAO](https://www.chromedao.xyz/initiatives) initiative, funded by daily NFT auctions on Solana. It is a public good: an open-source protocol, governed by holders, with no dedicated token. Its first uses serve the DAO itself: anti-sybil voting, Metaverse access, and selection of initiatives.
 
@@ -80,6 +80,27 @@ Smart-SSI first serves the Chrome DAO itself, then opens up to any service that 
 
 In each case, the verifier gets exactly the answer to its question, and nothing more.
 
+## Smart-SSI for AI agents
+
+More and more, people act through AI agents rather than through apps. The agent reads and acts through APIs, MCP servers and CLIs, and it will need to know whether what it reads is true. An agent that hires, lends or moderates a community must check that a real person stands behind a request, without collecting all of their data.
+
+Three questions remain open today:
+
+- **Who is acting?** The agent must show that it acts for its user, with their consent, within a clear limit.
+- **Is the data true?** Without proof, another agent has no reason to believe what it is told.
+- **What gets revealed?** To prove an income, an agent would today send full bank statements.
+
+Most services (banks, insurers, administrations) will not offer an MCP server for years. zkTLS makes any existing site provable without its permission: it bridges the closed web and the world of agents.
+
+Smart-SSI exposes this proof layer as an **MCP server** that any agent can call:
+
+1. The agent asks for a claim, for example "this person is an active developer".
+2. The user receives a link, opens the app, consents and proves on their phone.
+3. The issuer applies the public rule and records the attestation.
+4. The agent, or a third-party agent, verifies the claim. It never sees the raw data.
+
+The human always stays in the loop: an agent can request a proof, never produce one alone, so every attestation carries real consent. Operating systems built around AI will be designed by the big platforms; they will still need an open standard for proofs that works across agents and platforms. That is the place Smart-SSI aims for.
+
 ## Positioning
 
 Smart-SSI does not try to say who you are legally, but to prove what you have done.
@@ -132,7 +153,7 @@ Every Smart-SSI attestation rests on two distinct levels of trust, and we make t
 Deployment follows four phases, each approved by the DAO before the next one starts. Progress is tracked on the [public board](https://github.com/orgs/chromedao/projects/3) and in [ROADMAP.md](ROADMAP.md).
 
 1. **Phase 1, proof of concept**: DID on Solana, a first source (Strava or GitHub) proven through a zkTLS attestor run by the DAO on open-source components, first attestations issued to DAO members.
-2. **Phase 2, internal uses**: anti-sybil voting and proof-gated access in the Metaverse, 5 to 10 supported sources.
+2. **Phase 2, internal uses**: anti-sybil voting and proof-gated access in the Metaverse, 5 to 10 supported sources, a first MCP server so that AI agents can request and verify proofs.
 3. **Phase 3, opening up**: public SDK for external verifiers, first paying partners, full security audit.
 4. **Phase 4, decentralization**: multiple attestor network, interpretation in a trusted environment, interoperability work with the European wallet.
 
