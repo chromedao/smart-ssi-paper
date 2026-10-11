@@ -9,7 +9,7 @@ Deployment follows four phases from the [white paper](README.md#roadmap-and-limi
 | Phase | Board | Milestone | Scope |
 | --- | --- | --- | --- |
 | 1 · Proof of concept | Now | [Phase 1](https://github.com/chromedao/smart-ssi/milestone/1) | DID on Solana, a first source (GitHub) proven through our own TLSNotary notary (open source, no external provider), first attestations for DAO members, iOS and Android apps in closed testing |
-| 2 · Internal uses | Next | [Phase 2](https://github.com/chromedao/smart-ssi/milestone/2) | Anti-sybil voting, proof-gated Metaverse access, 5 to 10 sources |
+| 2 · Internal uses | Next | [Phase 2](https://github.com/chromedao/smart-ssi/milestone/2) | Anti-sybil voting, proof-gated Metaverse access, 5 to 10 sources, MCP server for AI agents |
 | 3 · Opening up | Later | [Phase 3](https://github.com/chromedao/smart-ssi/milestone/3) | Public SDK for verifiers, first paying partners, full security audit, legal review |
 | 4 · Decentralization | Later | [Phase 4](https://github.com/chromedao/smart-ssi/milestone/4) | Independent attestor network, interpretation in a TEE, interop with the EU wallet |
 

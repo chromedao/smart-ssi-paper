@@ -16,7 +16,7 @@ Smart-SSI permet à chacun de prouver des faits sur sa vie numérique, sans expo
 - **Interprétation** : une IA transforme ces données prouvées en affirmations simples et utiles, par exemple « coureur régulier depuis 2 ans ».
 - **Attestation** : ces affirmations deviennent des attestations liées à l'identité décentralisée de l'utilisateur sur Solana. Les données brutes ne quittent jamais son appareil.
 
-**Pourquoi maintenant.** Le zkTLS est devenu utilisable en production, Solana rend la vérification on-chain rapide et peu coûteuse, et l'Europe déploie son portefeuille d'identité numérique (eIDAS 2.0). L'identité légale aura bientôt son standard. La réputation prouvée, elle, n'en a pas encore.
+**Pourquoi maintenant.** Le zkTLS est devenu utilisable en production, Solana rend la vérification on-chain rapide et peu coûteuse, et l'Europe déploie son portefeuille d'identité numérique (eIDAS 2.0). L'identité légale aura bientôt son standard. La réputation prouvée, elle, n'en a pas encore. Et à mesure que les agents IA agissent pour nous, ils ont besoin de faits vérifiables : Smart-SSI peut être [leur couche de preuve](#smart-ssi-pour-les-agents-ia).
 
 **Le cadre.** Smart-SSI est une initiative de la [Chrome DAO](https://www.chromedao.xyz/initiatives), financée par les enchères quotidiennes de NFT sur Solana. C'est un bien commun : protocole open source, gouverné par les holders, sans token dédié. Ses premiers usages servent la DAO elle-même : votes anti-sybil, accès au Metaverse, sélection des initiatives.
 
@@ -80,6 +80,27 @@ Smart-SSI sert d'abord la Chrome DAO elle-même, puis s'ouvre à tout service qu
 
 Dans chaque cas, le vérificateur obtient exactement la réponse à sa question, et rien de plus.
 
+## Smart-SSI pour les agents IA
+
+De plus en plus, on agit à travers des agents IA plutôt qu'à travers des applications. L'agent lit et agit via des API, des serveurs MCP et des CLI, et il aura besoin de savoir si ce qu'il lit est vrai. Un agent qui recrute, prête ou modère une communauté doit vérifier qu'une vraie personne se trouve derrière une demande, sans aspirer toutes ses données.
+
+Trois questions restent aujourd'hui sans réponse :
+
+- **Qui agit ?** L'agent doit montrer qu'il agit pour son utilisateur, avec son accord, dans une limite claire.
+- **La donnée est-elle vraie ?** Sans preuve, un autre agent n'a aucune raison de croire ce qu'on lui transmet.
+- **Que révèle-t-on ?** Pour prouver un revenu, un agent enverrait aujourd'hui des relevés bancaires complets.
+
+La plupart des services (banques, assurances, administrations) n'auront pas de serveur MCP avant des années. Le zkTLS rend n'importe quel site existant prouvable, sans sa permission : c'est le pont entre le web fermé et le monde des agents.
+
+Smart-SSI expose cette couche de preuve sous la forme d'un **serveur MCP** que n'importe quel agent peut appeler :
+
+1. L'agent demande une affirmation, par exemple « cette personne code activement ».
+2. L'utilisateur reçoit un lien, ouvre l'app, donne son accord et prouve depuis son téléphone.
+3. L'émetteur applique la règle publique et inscrit l'attestation.
+4. L'agent, ou un agent tiers, vérifie l'affirmation. Il ne voit jamais les données brutes.
+
+L'humain reste toujours dans la boucle : un agent peut demander une preuve, jamais en produire une à lui seul, donc chaque attestation porte un consentement réel. Les systèmes d'exploitation pensés pour l'IA seront conçus par les grandes plateformes ; ils auront quand même besoin d'un standard ouvert de preuves, interopérable entre agents et plateformes. C'est la place que vise Smart-SSI.
+
 ## Positionnement
 
 Smart-SSI ne cherche pas à dire qui vous êtes légalement, mais à prouver ce que vous avez fait.
@@ -132,7 +153,7 @@ Chaque attestation Smart-SSI repose sur deux niveaux de confiance distincts, et 
 Le déploiement suit quatre phases, chacune validée par la DAO avant de lancer la suivante. L'avancement est suivi sur le [tableau public](https://github.com/orgs/chromedao/projects/3) et dans [ROADMAP.md](ROADMAP.md).
 
 1. **Phase 1, preuve de concept** : DID sur Solana, une première source (Strava ou GitHub) prouvée via un attestor zkTLS opéré par la DAO sur des briques open source, premières attestations émises pour des membres de la DAO.
-2. **Phase 2, usages internes** : votes anti-sybil et accès sur preuve dans le Metaverse, 5 à 10 sources prises en charge.
+2. **Phase 2, usages internes** : votes anti-sybil et accès sur preuve dans le Metaverse, 5 à 10 sources prises en charge, un premier serveur MCP pour que les agents IA puissent demander et vérifier des preuves.
 3. **Phase 3, ouverture** : SDK public pour les vérificateurs externes, premiers partenaires payants, audit de sécurité complet.
 4. **Phase 4, décentralisation** : réseau d'attestors multiples, interprétation en environnement sécurisé, travaux d'interopérabilité avec le portefeuille européen.
 
