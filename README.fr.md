@@ -111,6 +111,7 @@ Smart-SSI ne cherche pas à dire qui vous êtes légalement, mais à prouver ce 
 | World ID | Unicité humaine | Scan biométrique de l'iris | Pas de biométrie, et des preuves bien plus riches que « je suis humain » |
 | Gitcoin Passport (Human Passport) | Score d'humanité | Agrégation de comptes connectés | Smart-SSI prouve le contenu de l'activité, pas seulement l'existence des comptes |
 | Reclaim Protocol | Données Web2 brutes | Infrastructure zkTLS hébergée | Smart-SSI opère sa propre couche zkTLS open source, sans fournisseur externe, et y ajoute l'interprétation et l'identité |
+| Ledger Atom / Agent Intent | Approbation humaine des actions d'agents (transactions, propositions) | Signer matériel et écran sécurisé | Complémentaire : Ledger sécurise les clés et les signatures ; Smart-SSI prouve que les données sont vraies |
 
 **Notre angle :** être la couche qui relie les preuves de données (zkTLS) à une identité lisible par des humains et des applications. Les standards du W3C (DID, Verifiable Credentials) sont respectés, ce qui garde la porte ouverte à une interopérabilité avec le portefeuille européen.
 
