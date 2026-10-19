@@ -149,6 +149,23 @@ Chaque attestation Smart-SSI repose sur deux niveaux de confiance distincts, et 
 
 **Conformité RGPD.** Les affirmations portent sur des faits d'activité et non sur des traits psychologiques, ce qui limite le profilage. Aucune donnée sensible (santé, opinions, religion) n'est interprétée. Le traitement repose sur le consentement explicite de l'utilisateur, étape par étape. Point ouvert : l'articulation entre le droit à l'effacement et l'immuabilité de la blockchain, que nous traitons en ne mettant on-chain aucune donnée personnelle en clair, à valider avec un juriste.
 
+## Préparation post-quantique
+
+Une attestation peut rester valide pendant des années. Les signatures qui la portent doivent tenir aussi longtemps, y compris face à un ordinateur quantique.
+
+**Pourquoi maintenant.** En octobre 2026, Google Quantum AI a montré sur son processeur Willow que la culture d'états magiques (*magic state cultivation*), l'une des étapes les plus coûteuses vers un ordinateur quantique tolérant aux fautes, fonctionne sur du vrai matériel : 40 fois moins d'erreurs que des états non cultivés, et des états T à 99,99 % de fidélité logique ([Google](https://blog.google/innovation-and-ai/models-and-research/quantum-computing/magic-state-cultivation-quantum-computing/), publié dans *Science*). Personne ne peut dater la première machine capable de casser la cryptographie actuelle, mais chaque résultat de ce type la rapproche. Un protocole conçu aujourd'hui doit l'anticiper.
+
+**Ce qui est exposé.** Une telle machine ne lirait pas les données de Smart-SSI, qui ne quittent jamais l'appareil. Elle falsifierait des signatures : les clés ed25519 de l'utilisateur derrière did:sol, la clé de signature de l'émetteur sur le Solana Attestation Service, la signature de l'attestor sur une preuve zkTLS. Qui sait les falsifier peut émettre de fausses attestations ou agir à la place d'un utilisateur. Un second risque, plus limité, est « collecter maintenant, déchiffrer plus tard » : une session TLS enregistrée aujourd'hui pourrait être déchiffrée une fois la machine disponible.
+
+**Notre approche.** Quatre principes, inscrits dans le protocole dès la phase 1.
+
+1. **Agilité cryptographique.** Les algorithmes peuvent changer sans casser les identités. Un document did:sol peut déjà lister plusieurs clés : une clé post-quantique peut donc s'ajouter à côté de la clé actuelle. Les schémas sont versionnés et les attestations expirent : un nouveau format de signature arrive avec une nouvelle version de schéma, et les anciennes attestations s'éteignent d'elles-mêmes.
+2. **Des signatures hybrides pour la transition.** L'émetteur signe chaque affirmation deux fois : en ed25519, comme aujourd'hui, et en ML-DSA, standardisé par le NIST en 2024 (FIPS 204). Un vérificateur qui contrôle les deux reste protégé tant que l'une des deux tient. Les signatures post-quantiques sont plus lourdes : environ 2,4 Ko pour ML-DSA contre 64 octets pour ed25519. Là où la taille compte (stockage on-chain, appareils contraints), Falcon (FN-DSA), dont les signatures font environ 0,7 Ko, est le candidat.
+3. **Des preuves fondées sur le hachage.** Les systèmes de preuve fondés sur les couplages de courbes elliptiques, comme les SNARKs Groth16, ne résistent pas à un ordinateur quantique ; ceux fondés sur des fonctions de hachage, comme les STARKs, sont considérés comme résistants. Quand les preuves passeront on-chain, ou quand l'interprétation sera prouvée par zkML, Smart-SSI privilégiera les systèmes fondés sur le hachage.
+4. **Suivre la pile.** Les navigateurs et les grands CDN négocient déjà un échange de clés hybride post-quantique dans TLS (X25519MLKEM768), ce qui répond à « collecter maintenant, déchiffrer plus tard » partout où la source le prend en charge. La couche zkTLS l'adoptera au rythme de ses briques open source. Les comptes utilisateurs post-quantiques dépendent de Solana : Smart-SSI ne forkera pas la chaîne, mais adoptera ses signatures post-quantiques dès qu'elles seront disponibles, et la clé supplémentaire du DID garde ce chemin ouvert.
+
+**Calendrier.** La phase 1 utilise une cryptographie classique, avec des schémas versionnés et des dates d'expiration. Les signatures hybrides de l'émetteur arrivent avant l'ouverture des attestations à des tiers (phase 3). Les signatures post-quantiques des attestors et les preuves fondées sur le hachage arrivent avec le réseau d'attestors (phase 4).
+
 ## Roadmap et limites
 
 Le déploiement suit quatre phases, chacune validée par la DAO avant de lancer la suivante. L'avancement est suivi sur le [tableau public](https://github.com/orgs/chromedao/projects/3) et dans [ROADMAP.md](ROADMAP.md).
@@ -164,6 +181,7 @@ Le déploiement suit quatre phases, chacune validée par la DAO avant de lancer 
 - **Confiance résiduelle** : tant que l'interprétation n'est pas prouvée cryptographiquement, l'émetteur reste un tiers de confiance, encadré par la transparence et la gouvernance.
 - **Adoption** : une attestation n'a de valeur que si des vérificateurs l'acceptent. C'est pourquoi les premiers usages sont internes à la DAO.
 - **Cadre juridique** : le statut des attestations et leur articulation avec le RGPD doivent être validés avant l'ouverture à des tiers.
+- **Informatique quantique** : les signatures de la phase 1 (ed25519) ne résisteront pas à un grand ordinateur quantique. Le chemin de migration est décrit dans [Préparation post-quantique](#préparation-post-quantique).
 
 ## Annexe technique
 

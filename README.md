@@ -149,6 +149,23 @@ Every Smart-SSI attestation rests on two distinct levels of trust, and we make t
 
 **GDPR compliance.** Claims cover facts about activity, not psychological traits, which limits profiling. No sensitive data (health, opinions, religion) is interpreted. Processing relies on the user's explicit consent, step by step. Open point: reconciling the right to erasure with the immutability of the blockchain, which we address by putting no personal data in clear on-chain, to be confirmed with a lawyer.
 
+## Post-quantum readiness
+
+An attestation can stay valid for years. The signatures behind it have to hold just as long, including against a quantum computer.
+
+**Why now.** In October 2026, Google Quantum AI showed on its Willow processor that magic state cultivation, one of the costliest steps toward a fault-tolerant quantum computer, works on real hardware: 40 times fewer errors than uncultivated states, and T states at 99.99% logical fidelity ([Google](https://blog.google/innovation-and-ai/models-and-research/quantum-computing/magic-state-cultivation-quantum-computing/), published in *Science*). Nobody can date the first machine able to break today's cryptography, but each result of this kind brings it closer. A protocol designed today must plan for it.
+
+**What is exposed.** Such a machine would not read Smart-SSI's data, which never leaves the device. It would forge signatures: the user's ed25519 keys behind did:sol, the issuer's signing key on the Solana Attestation Service, the attestor's signature on a zkTLS proof. Whoever can forge them can issue false attestations or act for a user. A second, smaller risk is "harvest now, decrypt later": a TLS session recorded today could be decrypted once the machine exists.
+
+**Our approach.** Four principles, written into the protocol from phase 1.
+
+1. **Crypto-agility.** Algorithms can change without breaking identities. A did:sol document can already list several keys, so a post-quantum key can sit next to the current one. Schemas are versioned and attestations expire, so a new signature format arrives with a new schema version while old attestations expire on their own.
+2. **Hybrid signatures for the transition.** The issuer signs each claim twice: with ed25519, as today, and with ML-DSA, standardized by NIST in 2024 (FIPS 204). A verifier that checks both stays safe as long as either one holds. Post-quantum signatures are larger: about 2.4 KB for ML-DSA against 64 bytes for ed25519. Where size matters (on-chain storage, constrained devices), Falcon (FN-DSA), whose signatures are about 0.7 KB, is the candidate.
+3. **Hash-based proofs.** Proof systems built on elliptic-curve pairings, such as Groth16 SNARKs, do not survive a quantum computer; systems built on hash functions, such as STARKs, are considered resistant. When proofs move on-chain, or when interpretation is proven with zkML, Smart-SSI will favour hash-based systems.
+4. **Following the stack.** Browsers and major CDNs already negotiate hybrid post-quantum key exchange in TLS (X25519MLKEM768), which addresses "harvest now, decrypt later" wherever the source supports it. The zkTLS layer will adopt it as its open-source components do. Post-quantum user accounts depend on Solana itself: Smart-SSI will not fork the chain, but will adopt its post-quantum signatures once they ship, and the extra DID key keeps that path open.
+
+**Timeline.** Phase 1 uses classical cryptography, with versioned schemas and expiry dates. Hybrid issuer signatures arrive before attestations open to third parties (phase 3). Post-quantum attestor signatures and hash-based proofs come with the attestor network (phase 4).
+
 ## Roadmap and limits
 
 Deployment follows four phases, each approved by the DAO before the next one starts. Progress is tracked on the [public board](https://github.com/orgs/chromedao/projects/3) and in [ROADMAP.md](ROADMAP.md).
@@ -164,6 +181,7 @@ Deployment follows four phases, each approved by the DAO before the next one sta
 - **Residual trust**: until interpretation is proven cryptographically, the issuer remains a trusted third party, kept in check by transparency and governance.
 - **Adoption**: an attestation is only worth something if verifiers accept it. That is why the first uses are internal to the DAO.
 - **Legal framework**: the status of attestations and how they fit with the GDPR must be validated before opening up to third parties.
+- **Quantum computing**: the phase 1 signatures (ed25519) will not resist a large quantum computer. The migration path is described in [Post-quantum readiness](#post-quantum-readiness).
 
 ## Technical appendix
 
